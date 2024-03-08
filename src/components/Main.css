@@ -1,0 +1,7 @@
+.placeholder-light::placeholder {
+    color: #ccc; /* Light color for placeholder text */
+  }
+  
+  .placeholder-dark::placeholder {
+    color: #666; /* Dark color for placeholder text */
+  }
