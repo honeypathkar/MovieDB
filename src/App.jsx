@@ -41,7 +41,7 @@ function App() {
           <Route exact path='/' element={<Main setProgress={setProgress} mode={mode}/>}/>
           <Route exact path='/movie' element={<Main type="movie" setProgress={setProgress} mode={mode}/>}/>
           <Route exact path='/series' element={<Main type="series" setProgress={setProgress} mode={mode}/>}/>
-          <Route exact path='/contact' element={<Contact/>}/>
+          <Route exact path='/contact' element={<Contact mode={mode} setProgress={setProgress}/>}/>
         </Routes>
       </Router>
       <div className='container'>
