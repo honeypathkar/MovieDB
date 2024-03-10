@@ -8,13 +8,32 @@ export default function Main(props) {
   const { mode } = props;
   const [movie, setMovie] = useState([]); // Initialize movie state as an empty array
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("Adventure");
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [error, setError] = useState(null); // State to store error message
   const apiKey = "ee1fee82";
 
   const getMovieData = async () => {
+    props.setProgress(10);
+    const url = `https://www.omdbapi.com/?s=adventure&page=${page}&apikey=${apiKey}`;
+    setLoading(true);
+    setError(null); // Clear previous error if any
+    const response = await fetch(url);
+    props.setProgress(30);
+    const result = await response.json();
+    props.setProgress(70);
+    if (result.Response === "False") {
+      setError(result.Error); // Set error message if no movies found
+    } else {
+      setMovie(result.Search); // Set movie state to the array of movies
+      setTotalResults(result.totalResults);
+    }
+    setLoading(false);
+    props.setProgress(100);
+  };
+
+  const getMovieDataBySearch = async () => {
     props.setProgress(10);
     const url = `https://www.omdbapi.com/?s=${search}&page=${page}&type=${props.type}&apikey=${apiKey}`;
     setLoading(true);
@@ -36,9 +55,9 @@ export default function Main(props) {
   useEffect(() => {
     let timer = setTimeout(() => {
       getMovieData();
-    }, 5000);
+    }, 1000);
     return () => clearTimeout(timer);
-  }, [search, page, props.type]);
+  }, [page, props.type]);
 
   const handlePrevious = async () => {
     getMovieData();
@@ -50,10 +69,15 @@ export default function Main(props) {
     setPage(page + 1);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    getMovieDataBySearch();
+  };
+
   return (
     <div className="container" style={{ marginTop: "6rem" }}>
       <div className="my-3">
-        <form className="d-flex" role="search">
+        <form className="d-flex" role="search" onSubmit={handleSearch}>
           <input
             className={`form-control me-2 ${
               mode === "dark" ? "placeholder-light" : "placeholder-dark"
@@ -69,6 +93,12 @@ export default function Main(props) {
               color: mode === "dark" ? "white" : "black",
             }}
           />
+          <button
+            className={`btn btn-outline-${mode === "light" ? "dark" : "light"}`}
+            type="submit"
+          >
+            Search
+          </button>
         </form>
       </div>
       {loading && <Spinner />}
@@ -125,11 +155,8 @@ export default function Main(props) {
 }
 
 Main.defaultProps = {
-  search: "Adventure",
-  type: "movie",
-};
-
+  type: "movie"
+}
 Main.propTypes = {
-  search: PropTypes.string,
-  type: PropTypes.string,
-};
+  type : PropTypes.string,
+}
