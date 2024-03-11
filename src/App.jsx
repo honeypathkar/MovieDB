@@ -46,7 +46,6 @@ function App() {
       </Router>
       <div className='container'>
         <hr />
-        <Footer mode={mode}/>
       </div>
     </>
   )
