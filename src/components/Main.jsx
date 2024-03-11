@@ -34,22 +34,26 @@ export default function Main(props) {
   };
 
   const getMovieDataBySearch = async () => {
-    props.setProgress(10);
-    const url = `https://www.omdbapi.com/?s=${search}&page=${page}&type=${props.type}&apikey=${apiKey}`;
-    setLoading(true);
-    setError(null); // Clear previous error if any
-    const response = await fetch(url);
-    props.setProgress(30);
-    const result = await response.json();
-    props.setProgress(70);
-    if (result.Response === "False") {
-      setError(result.Error); // Set error message if no movies found
+    if (search === "") {
+      alert("Please enter movie or series name");
     } else {
-      setMovie(result.Search); // Set movie state to the array of movies
-      setTotalResults(result.totalResults);
+      props.setProgress(10);
+      const url = `https://www.omdbapi.com/?s=${search}&page=${page}&type=${props.type}&apikey=${apiKey}`;
+      setLoading(true);
+      setError(null); // Clear previous error if any
+      const response = await fetch(url);
+      props.setProgress(30);
+      const result = await response.json();
+      props.setProgress(70);
+      if (result.Response === "False") {
+        setError(result.Error); // Set error message if no movies found
+      } else {
+        setMovie(result.Search); // Set movie state to the array of movies
+        setTotalResults(result.totalResults);
+      }
+      setLoading(false);
+      props.setProgress(100);
     }
-    setLoading(false);
-    props.setProgress(100);
   };
 
   useEffect(() => {
@@ -155,8 +159,8 @@ export default function Main(props) {
 }
 
 Main.defaultProps = {
-  type: "movie"
-}
+  type: "movie",
+};
 Main.propTypes = {
-  type : PropTypes.string,
-}
+  type: PropTypes.string,
+};
