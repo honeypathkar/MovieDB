@@ -16,7 +16,7 @@ export default function Main(props) {
 
   const getMovieData = async () => {
     props.setProgress(10);
-    const url = `https://www.omdbapi.com/?s=adventure&page=${page}&apikey=${apiKey}`;
+    const url = `https://www.omdbapi.com/?s=adventure&apikey=${apiKey}`;
     setLoading(true);
     setError(null); // Clear previous error if any
     const response = await fetch(url);
@@ -61,15 +61,17 @@ export default function Main(props) {
       getMovieData();
     }, 1000);
     return () => clearTimeout(timer);
-  }, [page, props.type]);
+  }, []);
 
   const handlePrevious = async () => {
-    getMovieData();
+    //getMovieData();
+    getMovieDataBySearch();
     setPage(page - 1);
   };
 
   const handleNext = async () => {
-    getMovieData();
+    //getMovieData();
+    getMovieDataBySearch();
     setPage(page + 1);
   };
 

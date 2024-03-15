@@ -9,7 +9,6 @@ import {
   //Link
 } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar';
-import Footer from './components/Footer';
 import Contact from './components/Contact';
 
 function App() {
